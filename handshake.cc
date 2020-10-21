@@ -37,7 +37,6 @@ int main() {
   SSL_set_bio(server, sinbio, soutbio);
   SSL_set_accept_state(server);
 
-  BIO_write(sinbio, data, size);
   #ifdef __AFL_HAVE_MANUAL_CONTROL
     __AFL_INIT();
   #endif
@@ -48,7 +47,8 @@ int main() {
     printf("Failed to read from stdin\n");
     return(-1);
   }
-
+  
+  BIO_write(sinbio, data, size);
   SSL_do_handshake(server);
   SSL_free(server);
   return 0;
